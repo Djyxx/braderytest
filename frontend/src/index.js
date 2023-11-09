@@ -6,7 +6,6 @@ import store from "./redux/store"; // Assurez-vous que le chemin est correct
 
 // Importez le composant principal de votre application (Marketplace dans cet exemple)
 import Marketplace from "./components/Marketplace"; // Assurez-vous que le chemin est correct
-
 // Importez le fichier CSS principal (si vous en avez un)
 //import "./index.css"; Assurez-vous que le chemin est correct
 
