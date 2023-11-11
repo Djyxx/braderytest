@@ -1,4 +1,3 @@
-// Dans votre fichier "orders.js"
 const express = require("express");
 const router = express.Router();
 
@@ -13,7 +12,7 @@ router.post("/order", async (req, res) => {
   }
 
   try {
-    // Vérifier le stock pour chaque article
+    // Vérifie le stock pour chaque article
     for (const item of items) {
       const stockCheckQuery = `SELECT inventory FROM Products WHERE id = ${item.productId}`;
       const [stockResult] = await req.app.locals.db.query(stockCheckQuery);
@@ -27,7 +26,7 @@ router.post("/order", async (req, res) => {
       }
     }
 
-    // Si tout est en stock, passer la commande
+    // Si tout est en stock, passe la commande
     const orderTotal = items.reduce(
       (total, item) => total + item.price * item.quantity,
       0
@@ -56,10 +55,10 @@ router.post("/order", async (req, res) => {
   }
 });
 
-// Ajoutez une nouvelle route pour récupérer toutes les commandes
+// Ajoute une nouvelle route pour récupérer toutes les commandes
 router.get("/all", async (req, res) => {
   try {
-    // Récupérez toutes les commandes depuis la base de données
+    // Récupere toutes les commandes depuis la base de données
     const db = req.app.locals.db;
     const query = "SELECT * FROM Orders";
     const [orders] = await db.query(query);

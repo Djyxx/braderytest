@@ -1,21 +1,28 @@
-// Importez les dépendances nécessaires
 import React from "react";
-import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
-import store from "./redux/store"; // Assurez-vous que le chemin est correct
+import store from "./redux/store";
+import * as ReactDOM from "react-dom/client";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Marketplace from "./components/Marketplace";
+import Checkout from "./components/Checkout";
 
-// Importez le composant principal de votre application (Marketplace dans cet exemple)
-import Marketplace from "./components/Marketplace"; // Assurez-vous que le chemin est correct
-// Importez le fichier CSS principal (si vous en avez un)
-//import "./index.css"; Assurez-vous que le chemin est correct
+const App = () => <Marketplace />;
 
-// Le composant racine englobé dans le Redux Provider
-const App = (
-  <Provider store={store}>
-    <Marketplace />
-  </Provider>
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+  },
+  {
+    path: "/checkout",
+    element: <Checkout />,
+  },
+]);
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
+  </React.StrictMode>
 );
-
-// Rendu du composant racine dans l'élément avec l'id "root" du fichier public/index.html
-const root = createRoot(document.getElementById("root"));
-root.render(App);

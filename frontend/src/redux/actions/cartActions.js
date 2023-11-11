@@ -1,13 +1,9 @@
-// cartActions.js
-
-// cartActions.js
-
 export const addToCart = (product) => {
   return {
     type: "ADD_TO_CART",
     payload: {
       ...product,
-      id: product.id + Math.random(), // Ajoutez une valeur unique pour l'ID
+      id: product.id + Math.random(),
     },
   };
 };

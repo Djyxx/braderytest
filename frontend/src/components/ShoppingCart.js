@@ -1,8 +1,7 @@
-// ShoppingCart.js
-
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { removeFromCart } from "../redux/actions/cartActions";
+import { Link } from "react-router-dom";
 
 const ShoppingCart = () => {
   const cartItems = useSelector((state) => state.cart.items);
@@ -26,6 +25,7 @@ const ShoppingCart = () => {
           </li>
         ))}
       </ul>
+      <Link to="/Checkout">checkout</Link>
     </div>
   );
 };

@@ -16,16 +16,16 @@ const dbConfig = {
 const connection = mysql.createConnection(dbConfig);
 
 // Autres configurations et middleware
-app.use(cors()); // Ce middleware permettra à toutes les origines d'accéder à votre backend
+app.use(cors()); // Ce middleware permettra à toutes les origines d'accéder au backend
 
 // Routes et autres configurations
 const productsRouter = require("./routes/products");
-const ordersRouter = require("./routes/orders"); // Ajoutez cette ligne
+const ordersRouter = require("./routes/orders");
 app.use("/products", productsRouter);
-app.use("/orders", ordersRouter); // Ajoutez cette ligne
+app.use("/orders", ordersRouter);
 
 // db accessible à toutes les routes
-app.locals.db = connection; // Utilisez 'connection' au lieu de 'db'
+app.locals.db = connection;
 
 // Écoute du port
 app.listen(port, () => {
