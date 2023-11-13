@@ -1,75 +1,89 @@
 const express = require("express");
 const router = express.Router();
 
-// Route pour passer une commande
-router.post("/order", async (req, res) => {
-  const items = req.body?.items; // Les articles à acheter depuis le frontend
+// Modèle de commande (simulé)
+let orders = [];
 
-  if (!items || items.length === 0) {
+const updateQuantity = async (db, products) => {
+  return products.map(async (item) => {
+    const getItemQuery = `SELECT * from Products where id = ${item.id}`;
+    let product;
+    await db.query(getItemQuery, async (err, results) => {
+      if (results.length) {
+        product = results[0];
+        const query = `UPDATE Products SET inventory = ${
+          product.inventory - item.quantity
+        } where id = ${item.id}`;
+
+        return db.query(query, (err) => {
+          if (err) {
+            console.error(
+              "Erreur lors de la mise à jour de l'inventaire" + err.message
+            );
+          }
+        });
+      }
+    });
+  });
+};
+
+// Route pour récupérer toutes les commandes
+router.get("/", (req, res) => {
+  res.json(orders);
+});
+
+// Route pour créer une nouvelle commande
+router.post("/", async (req, res) => {
+  console.log("Requête POST reçue sur /orders");
+  console.log(req.body);
+  console.log(req.body.products);
+  const db = req.app.locals.db; // Accéde à la connexion à la base de données depuis app.js
+  const { total_price, products } = req.body;
+
+  // Vérifiez si les données requises sont présentes
+  if (!total_price || !products) {
     return res.status(400).json({
-      error: "Les données de la commande sont manquantes ou incorrectes.",
+      error: "Veuillez fournir le prix total et les produits de la commande.",
     });
   }
 
-  try {
-    // Vérifie le stock pour chaque article
-    for (const item of items) {
-      const stockCheckQuery = `SELECT inventory FROM Products WHERE id = ${item.productId}`;
-      const [stockResult] = await req.app.locals.db.query(stockCheckQuery);
+  await updateQuantity(db, products);
 
-      const availableStock = stockResult[0].inventory;
+  // Créez une nouvelle commande
+  const newOrder = {
+    id: orders.length + 1, // générateur d'ID unique
+    total_price,
+    order_date: new Date(),
+    products,
+  };
 
-      if (item.quantity > availableStock) {
-        return res.status(400).json({
-          error: `Stock insuffisant pour l'article ${item.productId}`,
-        });
+  // Insérez la nouvelle commande dans la base de données
+  const insertOrderQuery = `INSERT INTO Orders (total_price, order_date, products) VALUES (?, ?, ?)`;
+
+  db.query(
+    insertOrderQuery,
+    [
+      newOrder.total_price,
+      newOrder.order_date.toISOString().slice(0, 19).replace("T", " "),
+      JSON.stringify(newOrder.products),
+    ],
+    (err, result) => {
+      if (err) {
+        console.error(
+          "Erreur lors de l'insertion de la commande :",
+          err.message
+        );
+        return res
+          .status(500)
+          .json({ error: "Erreur lors de la création de la commande." });
       }
+
+      // Ajoute la nouvelle commande à la liste des commandes
+      orders.push(newOrder);
+
+      res.status(201).json(newOrder);
     }
-
-    // Si tout est en stock, passe la commande
-    const orderTotal = items.reduce(
-      (total, item) => total + item.price * item.quantity,
-      0
-    );
-    const insertOrderQuery =
-      "INSERT INTO Orders (total_price, products) VALUES (?, ?)";
-
-    await req.app.locals.db.query(insertOrderQuery, [
-      orderTotal,
-      JSON.stringify(items),
-    ]);
-
-    // Mettre à jour le stock dans la base de données
-    for (const item of items) {
-      const updateStockQuery = `UPDATE Products SET inventory = inventory - ${item.quantity} WHERE id = ${item.productId}`;
-      await req.app.locals.db.query(updateStockQuery);
-    }
-
-    // Répondre avec succès
-    res
-      .status(200)
-      .json({ success: true, message: "Commande passée avec succès" });
-  } catch (error) {
-    console.error("Erreur lors du traitement de la commande : ", error);
-    res.status(500).json({ error: "Erreur lors du traitement de la commande" });
-  }
-});
-
-// Ajoute une nouvelle route pour récupérer toutes les commandes
-router.get("/all", async (req, res) => {
-  try {
-    // Récupere toutes les commandes depuis la base de données
-    const db = req.app.locals.db;
-    const query = "SELECT * FROM Orders";
-    const [orders] = await db.query(query);
-
-    res.json(orders);
-  } catch (error) {
-    console.error("Erreur lors de la récupération des commandes : ", error);
-    res
-      .status(500)
-      .json({ error: "Erreur lors de la récupération des commandes" });
-  }
+  );
 });
 
 module.exports = router;

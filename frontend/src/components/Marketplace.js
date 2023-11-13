@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../redux/actions/cartActions";
 import ShoppingCart from "./ShoppingCart";
 
@@ -7,6 +7,7 @@ const Marketplace = () => {
   const dispatch = useDispatch();
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const cartItems = useSelector((state) => state.cart.items);
 
   useEffect(() => {
     fetch("http://localhost:3000/products")
@@ -17,9 +18,15 @@ const Marketplace = () => {
       );
   }, []);
   const handleAddToCart = (product) => {
+    const existingProduct = cartItems.find((item) => item.id === product.id);
+    if (existingProduct?.quantity >= product.inventory) {
+      alert("Inventaire insuffisant !");
+      return false;
+    }
     dispatch(addToCart(product));
     alert("Produit ajouté au panier !");
     setSelectedProduct(null);
+    return true;
   };
 
   return (

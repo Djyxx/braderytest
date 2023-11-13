@@ -3,8 +3,8 @@ const router = express.Router();
 
 // Route pour récupérer tous les produits
 router.get("/", (req, res) => {
-  // Récupérez tous les produits depuis la base de données
-  const db = req.app.locals.db; // Accédez à la connexion à la base de données depuis app.js
+  // Récupere tous les produits depuis la base de données
+  const db = req.app.locals.db; // Accéde à la connexion à la base de données depuis app.js
 
   const query = "SELECT * FROM Products";
 

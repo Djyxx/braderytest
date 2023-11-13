@@ -12,11 +12,17 @@ const Checkout = () => {
     address: "",
   });
 
-  const totalAmount = cartItems.reduce((total, item) => {
-    console.log("Item:", item);
-    console.log("Price:", item.price);
-    return total + item.price;
-  }, 0);
+  const totalAmount = parseFloat(
+    cartItems
+      .reduce((total, item) => {
+        console.log("Item:", item);
+        console.log("Price:", item.price);
+        return total + item.price * item.quantity;
+      }, 0)
+      .toFixed(2)
+  );
+
+  console.log("Total Amount:", totalAmount);
 
   // Fonction pour gérer les modifications des champs du formulaire
   const handleInputChange = (e) => {
@@ -28,9 +34,32 @@ const Checkout = () => {
     dispatch(removeFromCart(itemId));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Formulaire soumis avec les données :", formData);
+
+    // Créez un objet contenant les données de la commande
+    const orderData = {
+      total_price: totalAmount,
+      products: cartItems,
+      ...formData,
+    };
+
+    try {
+      const response = await fetch("http://localhost:3000/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      if (!response.ok) {
+        throw new Error("La requête a échoué.");
+      }
+    } catch (error) {
+      console.error("Erreur lors de la soumission de la commande :", error);
+    }
   };
 
   return (
@@ -40,7 +69,8 @@ const Checkout = () => {
       <ul>
         {cartItems.map((item) => (
           <li key={item.id}>
-            {item.name} - Prix: ${item.price}
+            {item.name} - Prix: ${item.price * item.quantity} - Quantité:{" "}
+            {item.quantity}
             <button onClick={() => handleRemoveFromCart(item.id)}>
               Supprimer
             </button>

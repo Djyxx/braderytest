@@ -17,12 +17,15 @@ const connection = mysql.createConnection(dbConfig);
 
 // Autres configurations et middleware
 app.use(cors()); // Ce middleware permettra à toutes les origines d'accéder au backend
+app.use(express.json());
 
 // Routes et autres configurations
 const productsRouter = require("./routes/products");
 const ordersRouter = require("./routes/orders");
-app.use("/products", productsRouter);
+
+// Placez la route pour le gestionnaire de commandes avant celle du gestionnaire de produits
 app.use("/orders", ordersRouter);
+app.use("/products", productsRouter);
 
 // db accessible à toutes les routes
 app.locals.db = connection;
