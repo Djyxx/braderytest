@@ -1,33 +1,34 @@
 const express = require("express");
 const mysql = require("mysql");
 const cors = require("cors");
+require("dotenv").config();
 
 const app = express();
 const port = 3000;
 
 // Configuration de la connexion à la base de données
 const dbConfig = {
-  host: "localhost",
-  user: "root",
-  password: "Djyxgogo93",
-  database: "braderytest",
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
 };
 
 const connection = mysql.createConnection(dbConfig);
 
-// Autres configurations et middleware
-app.use(cors()); // Ce middleware permettra à toutes les origines d'accéder au backend
-app.use(express.json());
+// Middleware et configuration
+app.use(cors()); // Middleware permettant à toutes les origines d'accéder au backend
+app.use(express.json()); // Middleware pour traiter les données JSON
 
 // Routes et autres configurations
 const productsRouter = require("./routes/products");
 const ordersRouter = require("./routes/orders");
 
-// Placez la route pour le gestionnaire de commandes avant celle du gestionnaire de produits
+// Configuration des routes pour les gestionnaires de commandes et de produits
 app.use("/orders", ordersRouter);
 app.use("/products", productsRouter);
 
-// db accessible à toutes les routes
+// Rend la connexion à la base de données accessible à toutes les routes
 app.locals.db = connection;
 
 // Écoute du port

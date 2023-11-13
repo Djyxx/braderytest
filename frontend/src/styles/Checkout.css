@@ -1,0 +1,83 @@
+.checkout-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100vh;
+  margin: 0;
+  background-color: white;
+  color: black;
+}
+
+.checkout-title {
+  text-align: center;
+}
+
+.checkout-subtitle {
+  text-align: center;
+}
+
+.checkout-list {
+  list-style: none;
+  padding: 0;
+}
+
+.checkout-item {
+  margin-bottom: 10px;
+}
+
+.remove-button {
+  background-color: #ff6666;
+  color: white;
+  padding: 5px;
+  border: none;
+  cursor: pointer;
+  width: 70px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.remove-button:hover {
+  background-color: #ff4d4d;
+}
+
+.checkout-total {
+  text-align: center;
+}
+
+.checkout-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form-label {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.form-input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  box-sizing: border-box;
+}
+
+.form-group {
+  width: 100%;
+  margin-top: 15px;
+}
+
+.submit-button {
+  background-color: black;
+  color: white;
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: #333;
+}

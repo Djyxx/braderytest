@@ -14,6 +14,10 @@ const router = createBrowserRouter([
     element: <App />,
   },
   {
+    path: "/marketplace",
+    element: <Marketplace />,
+  },
+  {
     path: "/checkout",
     element: <Checkout />,
   },
@@ -22,7 +26,7 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <RouterProvider router={router}>{router}</RouterProvider>
     </Provider>
   </React.StrictMode>
 );

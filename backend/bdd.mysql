@@ -1,0 +1,42 @@
+-- Creating the Products table
+CREATE TABLE Products (
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  price DECIMAL(10, 2) NOT NULL,
+  inventory INT NOT NULL,
+  image VARCHAR(255)
+);
+
+
+-- Inserting 20 sample fashion product entries
+INSERT INTO Products (name, price, inventory, image) VALUES
+('T-shirt Blanc', 19.99, 73, 'https://png.pngtree.com/png-clipart/20230427/ourmid/pngtree-isolated-white-t-shirt-on-background-png-image_6736644.png'),
+('Jean Slim Noir', 49.99, 1, 'https://www.ruedeshommes.com/media/cache/produits/1/0/102853-92569vt-jean-coupe-slim-jacketjones-en-coton-melange-noir-01_330x330.JPG'),
+('Chaussures de Sport', 89.99, 38, 'https://i.ebayimg.com/images/g/FI4AAOSwLspjBfBO/s-l400.png'),
+('Veste en Cuir', 199.99, 22, 'https://img1.freepng.fr/20180627/tuc/kisspng-perfecto-motorcycle-jacket-leather-jacket-blouson-rewind-5b33c33725e078.7008385915301189671552.jpg'),
+("Robe d'Été", 29.99, 60, 'https://m.media-amazon.com/images/I/71losquDiyL._AC_UF350,350_QL80_.jpg'),
+('Cravate en Soie', 24.99, 39, 'https://media.gucci.com/style/DarkGray_Center_0_0_490x490/1646071272/707255_4EAAT_1000_001_100_0000_Light.jpg'),
+('Sac à Main', 59.99, 29, 'https://media.cdnws.com/_i/94261/1882/1510/85/0-2020-femmes-sac-main-en-cuir-sac-main-michael-crocodile-sac-bandouli-re-paule-sacs-de.png'),
+('Chapeau Panama', 34.99, 17, 'https://www.bon-clic-bon-genre.com/vignette2/chapeau-panama-57311.jpg'),
+('Écharpe en Laine', 29.99, 45, 'https://png.pngtree.com/png-vector/20210426/ourmid/pngtree-stylish-red-scarf-png-image_3243901.png'),
+('Ceinture en Cuir', 39.99, 70, 'https://png.pngtree.com/png-vector/20210522/ourmid/pngtree-belt-accessories-accessories-leather-png-image_3321887.png'),
+('Montre Classique', 149.99, 15, 'https://mr-expert.com/wp-content/uploads/2021/12/2-rolex-lady-datejust.png'),
+('Bottes en Cuir', 99.99, 40, 'https://cdn.laredoute.com/products/8/1/d/81d60544d0e5792e3106cc41ad3fc123.jpg?width=400&dpr=1'),
+('Lunettes de Soleil', 79.99, 50, 'https://png.pngtree.com/element_pic/17/10/07/e85be642e3cb7f9edf07af9400ac5cd5.jpg'),
+('Chemise à Carreaux', 44.99, 54, 'https://img.freepik.com/photos-premium/chemise-carreaux-rouge-du-sang-fond-blanc-concept-halloween_743855-19896.jpg?w=360'),
+('Pull-over Gris', 64.99, 33, 'https://img1.freepng.fr/20180927/ugo/kisspng-sweater-sleeve-shirt-polo-neck-collar-2-18-lantern-sleeve-plain-pullover-sweater-gray-on-5bac857e6d8f92.8001950715380330224488.jpg'),
+('Short en Jean', 39.99, 60, 'https://png.pngtree.com/png-vector/20201129/ourmid/pngtree-denim-shorts-png-image_2400987.jpg'),
+("Sandales d'Été", 49.99, 40, 'https://img.freepik.com/psd-premium/psd-3d-sandales-fond-isole-transparent_817178-1815.jpg?w=360'),
+('Bijoux Fantaisie', 14.99, 85, 'https://lesnereides.sirv.com/27582-large_default/collier-deux-rangs-chaines-et-perles-de-culture.jpg?q=90'),
+('Pantalon Chino', 54.99, 50, 'https://image.uniqlo.com/UQ/ST3/WesternCommon/imagesgoods/450269/sub/goods_450269_sub15.jpg?width=494'),
+('Blouse Florale', 39.99, 40, 'https://www.loop-generation.com/cdn/shop/products/IMG_8064.png?v=1679759376&width=360');
+
+
+-- Creating the Products orders
+CREATE TABLE Orders (
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  total_price DECIMAL(10, 2) NOT NULL,
+  order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  products JSON NOT NULL
+);
+

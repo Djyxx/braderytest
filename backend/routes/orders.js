@@ -18,7 +18,7 @@ const updateQuantity = async (db, products) => {
         return db.query(query, (err) => {
           if (err) {
             console.error(
-              "Erreur lors de la mise à jour de l'inventaire" + err.message
+              "Erreur lors de la mise à jour de l'inventaire : " + err.message
             );
           }
         });
@@ -37,10 +37,10 @@ router.post("/", async (req, res) => {
   console.log("Requête POST reçue sur /orders");
   console.log(req.body);
   console.log(req.body.products);
-  const db = req.app.locals.db; // Accéde à la connexion à la base de données depuis app.js
+  const db = req.app.locals.db; // Accède à la connexion à la base de données depuis app.js
   const { total_price, products } = req.body;
 
-  // Vérifiez si les données requises sont présentes
+  // Vérifie si les données requises sont présentes
   if (!total_price || !products) {
     return res.status(400).json({
       error: "Veuillez fournir le prix total et les produits de la commande.",
@@ -49,7 +49,7 @@ router.post("/", async (req, res) => {
 
   await updateQuantity(db, products);
 
-  // Créez une nouvelle commande
+  // Crée une nouvelle commande
   const newOrder = {
     id: orders.length + 1, // générateur d'ID unique
     total_price,
@@ -57,7 +57,7 @@ router.post("/", async (req, res) => {
     products,
   };
 
-  // Insérez la nouvelle commande dans la base de données
+  // Insère la nouvelle commande dans la base de données
   const insertOrderQuery = `INSERT INTO Orders (total_price, order_date, products) VALUES (?, ?, ?)`;
 
   db.query(
